@@ -31,23 +31,36 @@
 <script src="api.js"></script>
 
 <script>
-function loadData(){
+$(document).ready(function (){
 	$("#site-title").html(config["site_title"]);
 	$("#title").html(config["site_title"]);
-	$("#top-title").html("<span></span>"+config["site_title"]);
+	$("#context").hide();
 	api_call("GET",{"mod":"timeline","api":"public"},function (data) {
-		var html="<table class=\"table bordered hovered\"><tbody><tr><td>标题</td><td>作者</td><td>时间</td></tr>";
-		console.log("req finished");
+		var html="";
+		console.log(data);
 		for(i in data.posts)
 		{
-			html += "<tr><td><a href=\"post_show.html?id="+data.posts[i].id+"\">"+data.posts[i].title+"</a></td><td>"+data.posts[i].author.nick+"</td><td>"+data.posts[i].time+"</td></tr>";
+			html+="<dl class=\"horizontal\"><dt><a href=\"post_show.html?id=";
+			html+=data.posts[i].id;
+			html+="\">";
+			html+=data.posts[i].title;
+			html+="</a></dt><dd>";
+			html+="<p>";
+			html+=data.posts[i].author.nick;
+			html+=" AT ";
+			html+=data.posts[i]["time"];
+			html+="</p><p>";
+			html+=data.posts[i].text_preview;
+			html +="</p><p><a href=\"post_show.html?id=";
+			html+=data.posts[i].id;
+			html+="\"><button class=\"button info\">More</button></a></p>";
+			html+="</dd></dl></a>";
 		}
-		html+="</tbody></table>";
-		console.log(data);
+		html+="";
 		$("#context").html(html);
+		$("#context").slideDown();
 	});
-}
-loadData();
+});
 </script>
 
 <title id="site-title">ToiletCrazy</title>

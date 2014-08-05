@@ -31,23 +31,23 @@
 <script src="api.js"></script>
 
 <script>
-function loadData(){
+$(document).ready(function (){
 	$("#site-title").html(config["site_title"]);
 	$("#title").html(config["site_title"]);
-	$("#top-title").html("<span></span>"+config["site_title"]);
-}
-loadData();
-var sub=function(){
-	api_call("POST",{"mod":"auth","api":"auth","nick":$("#nick").val(),"pass":$("#pass").val()},function(data){
-		console.log(data);
-		if(data.token){
-			$("#token").val(data.token);
-			$("#token").attr("data-state","success");
-		}else{
-			alert("error: "+data.error);
-		}
+	$("#submit").click(function(){
+		api_call("POST",{"mod":"auth","api":"auth","nick":$("#nick").val(),"pass":$("#pass").val()},function(data){
+			if(data.token){
+				$("#token").val(data.token);
+				$("#token").attr("data-state","success");
+				$("#up").slideUp();
+				$("#down").slideDown();
+			}else{
+				alert("error: "+data.error);
+			}
+		});
 	});
-};
+	$("#down").hide();
+});
 </script>
 
 <title id="site-title">ToiletCrazy</title>
@@ -66,16 +66,19 @@ var sub=function(){
 	</div>
 	<div class="container" id="context">
 		<form>
-		<fieldset>
-			<legend>Get the token</legend>
-			<label>Nickname</label>
-			<input id="nick" type="text" data-transform="input-control"/><br/>
-			<label>Password</label>
-			<input id="pass" type="password" data-transform="input-control"/><br/>
-			<input id="submit" type="button" value="Submit" onclick="sub();" />
-			<label>Token (Will show after submit)</label>
-			<input id="token" type="text" data-transform="input-control" readonly /><br/>
-		</fieldset>
+			<fieldset>
+				<legend>Get the token</legend>
+				<div id="up">
+					<label>Nickname</label> <input id="nick" type="text"
+						data-transform="input-control" /><br /> <label>Password</label> <input
+						id="pass" type="password" data-transform="input-control" /><br />
+					<input id="submit" type="button" value="Submit" />
+				</div>
+				<div id="down">
+					<label>Token</label> <input id="token" type="text"
+						data-transform="input-control" readonly /><br />
+				</div>
+			</fieldset>
 		</form>
 	</div>
 	<div class="bg-gray" data-load="footer.html"></div>

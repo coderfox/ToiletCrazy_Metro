@@ -31,21 +31,29 @@
 <script src="api.js"></script>
 
 <script>
-function loadData(){
+$(document).ready(function (){
 	$("#site-title").html(config["site_title"]);
 	$("#title").html(config["site_title"]);
-	$("#top-title").html("<span></span>"+config["site_title"]);
-}
-loadData();
-var sub=function(){
+	$("#submit").click(function(){
 	api_call("POST",{"mod":"post","api":"post","title":$("#ititle").val(),"text":$("#text").val(),"token":$("#token").val()},function(data){
-		if(data.id){
-			document.location="post_show.html?id="+data.id;
-		}else{
-			alert("error: "+data.error);
-		}
+			if(data.id){
+				$("#context").slideUp();
+				api_call("GET",{"mod":"post","api":"show","id":data.id},function (data) {
+					console.log(data);
+					$("#site-title").html(data.title+" - "+data.author.nick);
+					$("#title").html(data.title);
+					$("#subtitle").html(data.author.nick+" AT "+data.time);
+					$("#context").html("<p>本文链接：<a href=\"post_show.html?id="+data.id+"\">"+data.id+"</a></p>"+data.text_html);
+					$("#context").slideDown();
+
+				});
+				//document.location="post_show.html?id="+data.id;
+			}else{
+				alert("error: "+data.error);
+			}
+		});
 	});
-};
+});
 </script>
 
 <title id="site-title">ToiletCrazy</title>
@@ -64,16 +72,16 @@ var sub=function(){
 	</div>
 	<div class="container" id="context">
 		<form>
-		<fieldset>
-			<legend>Post a new post</legend>
-			<label>Title</label>
-			<input id="ititle" type="text" data-transform="input-control"/><br/>
-			<label>Token</label>
-			<input id="token" type="text" data-transform="input-control"/><br/>
-			<label>Text</label>
-			<textarea id="text" data-transform="input-control"></textarea><br/>
-			<input id="submit" type="button" value="Submit" onclick="sub();" />
-		</fieldset>
+			<fieldset>
+				<legend>Post a new post</legend>
+				<div id="up">
+					<label>Title</label> <input id="ititle" type="text"
+						data-transform="input-control" /><br /> <label>Token</label> <input
+						id="token" type="text" data-transform="input-control" /><br /> <label>Text</label>
+					<textarea id="text" data-transform="input-control"></textarea>
+					<br /> <input id="submit" type="button" value="Submit" />
+				</div>
+			</fieldset>
 		</form>
 	</div>
 	<div class="bg-gray" data-load="footer.html"></div>
