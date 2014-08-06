@@ -35,7 +35,11 @@ $(document).ready(function (){
 	$("#site-title").html(config["site_title"]);
 	$("#title").html(config["site_title"]);
 	$("#context").hide();
-	api_call("GET",{"mod":"timeline","api":"public"},function (data) {
+	var page=1;
+	if($.getUrlVar("page")>1){
+		page=$.getUrlVar("page");
+	}
+	api_call("GET","timeline/public",{"page":page,"count":10},function (data) {
 		var html="";
 		console.log(data);
 		for(i in data.posts)
@@ -48,15 +52,44 @@ $(document).ready(function (){
 			html+="<p>";
 			html+=data.posts[i].author.nick;
 			html+=" AT ";
-			html+=data.posts[i]["time"];
+			html+=data.posts[i].time.formatted;
 			html+="</p><p>";
-			html+=data.posts[i].text_preview;
+			html+=data.posts[i].text.preview;
 			html +="</p><p><a href=\"post_show.html?id=";
 			html+=data.posts[i].id;
 			html+="\"><button class=\"button info\">More</button></a></p>";
 			html+="</dd></dl></a>";
 		}
-		html+="";
+		html+="<div class=\"pagination\" style=\"margin-top: 20px\"><ul>";
+		html+="<li class=\"first\"><a href=\"?page=1\"><i class=\"icon-first-2\"></i></a></li>";
+		if(data.pages.current===1){
+			
+		}else{
+			html+="<li class=\"prev\"><a href=\"?page=";
+			html+=data.pages.current-1;
+			html+="\"><i class=\"icon-previous\"></i></a></li>";
+		}
+		for(ii=1;ii<=data.pages.count;ii++){
+			if(ii===data.pages.current){
+				html+="<li class=\"active\"><a href=\"?page=";
+			}else{
+				html+="<li><a href=\"?page=";
+			}
+			html+=ii;
+			html+="\">";
+			html+=ii;
+			html+="</a></li>";
+		}
+		if(data.pages.current===data.pages.count){
+			
+		}else{
+			html+="<li class=\"next\"><a href=\"?page=";
+			html+=data.pages.current+1;
+			html+="\"><i class=\"icon-next\"></i></a></li>";
+		}
+		html+="<li class=\"last\"><a href=\"?page=";
+		html+=data.pages.count;
+		html+="\"><i class=\"icon-last-2\"></i></a></li></ul></div>";
 		$("#context").html(html);
 		$("#context").slideDown();
 	});
@@ -77,8 +110,7 @@ $(document).ready(function (){
 			</div>
 		</div>
 	</div>
-	<div class="container" id="context">
-	</div>
+	<div class="container" id="context"></div>
 	<div class="bg-gray" data-load="footer.html"></div>
 </body>
 </html>

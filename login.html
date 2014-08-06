@@ -35,7 +35,7 @@ $(document).ready(function (){
 	$("#site-title").html(config["site_title"]);
 	$("#title").html(config["site_title"]);
 	$("#submit").click(function(){
-		api_call("POST",{"mod":"auth","api":"auth","nick":$("#nick").val(),"pass":$("#pass").val()},function(data){
+		api_call("POST","auth/auth",{"nick":$("#nick").val(),"pass":$("#pass").val()},function(data){
 			if(data.token){
 				$("#token").val(data.token);
 				$("#token").attr("data-state","success");
@@ -70,8 +70,8 @@ $(document).ready(function (){
 				<legend>Get the token</legend>
 				<div id="up">
 					<label>Nickname</label> <input id="nick" type="text"
-						data-transform="input-control" /><br /> <label>Password</label> <input
-						id="pass" type="password" data-transform="input-control" /><br />
+						data-transform="input-control" /><br /> <label>Password</label>
+					<input id="pass" type="password" data-transform="input-control" /><br />
 					<input id="submit" type="button" value="Submit" />
 				</div>
 				<div id="down">

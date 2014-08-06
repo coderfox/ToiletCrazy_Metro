@@ -35,12 +35,12 @@ $(document).ready(function loadData(){
 	$("#site-title").html(config["site_title"]);
 	$("#title").html(config["site_title"]);
 	$("#context").hide();
-	api_call("GET",{"mod":"post","api":"show","id":$.getUrlVar("id")},function (data) {
+	api_call("GET","post/show",{"id":$.getUrlVar("id")},function (data) {
 		console.log(data);
 		$("#site-title").html(data.title+" - "+data.author.nick);
 		$("#title").html(data.title);
-		$("#subtitle").html(data.author.nick+" AT "+data.time);
-		$("#context").html(data.text_html);
+		$("#subtitle").html(data.author.nick+" AT "+data.time.formatted);
+		$("#context").html(data.text.html);
 		$("#context").slideDown();
 	});
 });
