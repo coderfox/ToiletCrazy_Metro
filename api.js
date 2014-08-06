@@ -1,6 +1,6 @@
 var config = {
-	"site_title" : "TC",
-	"api_uri" : "back/api.php"
+	"site_title" : "如厕也疯狂 beta v0.2.5",
+	"api_uri" : "http://api.cotr.me/tc/back/api.php"
 };
 var api_call = function(method, c, params, callback) {
 	var func = null;
